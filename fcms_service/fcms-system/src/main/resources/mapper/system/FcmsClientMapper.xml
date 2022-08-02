@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcms.system.mapper.FcmsClientMapper">
+
+    <resultMap type="com.fcms.system.domain.FcmsClient" id="FcmsClientResult">
+        <result property="clientId" column="client_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="fileId" column="file_id"/>
+        <result property="clientName" column="client_name"/>
+        <result property="clientPinyin" column="client_pinyin"/>
+        <result property="remarkName" column="remark_name"/>
+        <result property="projectName" column="project_name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="phoneStandby" column="phone_standby"/>
+        <result property="liveness" column="liveness"/>
+        <result property="faceCode" column="face_code"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="avatarBase" column="avatar_base"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectFcmsClientVo">
+        select fc.client_id,
+               fc.user_id,
+               fc.dept_id,
+               fc.file_id,
+               fc.client_name,
+               fc.client_pinyin,
+               fc.remark_name,
+               fc.project_name,
+               fc.email,
+               fc.phone,
+               fc.phone_standby,
+               fc.liveness,
+               fc.face_code,
+               fc.age,
+               fc.sex,
+               fc.avatar,
+               fc.avatar_url,
+               fc.avatar_base,
+               fc.status,
+               fc.del_flag,
+               fc.create_by,
+               fc.create_time,
+               fc.update_by,
+               fc.update_time,
+               fc.remark
+        from fcms_client fc
+    </sql>
+
+    <select id="selectFcmsClientList" parameterType="FcmsClient" resultMap="FcmsClientResult">
+        <include refid="selectFcmsClientVo"/>
+        <where>
+            <if test="userId != null ">and fc.user_id = #{userId}</if>
+            <if test="fileId != null ">and fc.file_id = #{fileId}</if>
+            <if test="clientName != null  and clientName != ''">and fc.client_name like concat('%', #{clientName}, '%')
+            </if>
+            <if test="clientPinyin != null  and clientPinyin != ''">and fc.client_pinyin like concat('%', #{clientPinyin},
+                '%')
+            </if>
+            <if test="remarkName != null  and remarkName != ''">and fc.remark_name like concat('%', #{remarkName}, '%')
+            </if>
+            <if test="projectName != null  and projectName != ''">and fc.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="email != null  and email != ''">and fc.email like concat('%', #{email}, '%')</if>
+            <if test="phone != null  and phone != ''">and fc.phone like concat('%', #{phone}, '%')</if>
+            <if test="phoneStandby != null  and phoneStandby != ''">and fc.phone_standby like concat('%', #{phoneStandby},
+                '%')
+            </if>
+            <if test="liveness != null ">and fc.liveness = #{liveness}</if>
+            <if test="faceCode != null  and faceCode != ''">and fc.face_code = #{faceCode}</if>
+            <if test="age != null ">and fc.age = #{age}</if>
+            <if test="sex != null  and sex != ''">and fc.sex = #{sex}</if>
+            <if test="status != null  and status != ''">and fc.status = #{status}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+        order by fc.client_id desc
+    </select>
+
+    <select id="selectFcmsClientCount" resultType="java.lang.Integer">
+        select count(*)
+        from fcms_client fc
+        <where>
+            <if test="userId != null ">and fc.user_id = #{userId}</if>
+            <if test="fileId != null ">and fc.file_id = #{fileId}</if>
+            <if test="clientName != null  and clientName != ''">and fc.client_name like concat('%', #{clientName}, '%')
+            </if>
+            <if test="clientPinyin != null  and clientPinyin != ''">and fc.client_pinyin like concat('%', #{clientPinyin},
+                '%')
+            </if>
+            <if test="remarkName != null  and remarkName != ''">and fc.remark_name like concat('%', #{remarkName}, '%')
+            </if>
+            <if test="projectName != null  and projectName != ''">and fc.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="email != null  and email != ''">and fc.email like concat('%', #{email}, '%')</if>
+            <if test="phone != null  and phone != ''">and fc.phone like concat('%', #{phone}, '%')</if>
+            <if test="phoneStandby != null  and phoneStandby != ''">and fc.phone_standby like concat('%', #{phoneStandby},
+                '%')
+            </if>
+            <if test="liveness != null ">and fc.liveness = #{liveness}</if>
+            <if test="faceCode != null  and faceCode != ''">and fc.face_code = #{faceCode}</if>
+            <if test="age != null ">and fc.age = #{age}</if>
+            <if test="sex != null  and sex != ''">and fc.sex = #{sex}</if>
+            <if test="status != null  and status != ''">and fc.status = #{status}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectFcmsClientByClientId" parameterType="Long" resultMap="FcmsClientResult">
+        <include refid="selectFcmsClientVo"/>
+        where client_id = #{clientId}
+    </select>
+
+    <insert id="insertFcmsClient" parameterType="FcmsClient" useGeneratedKeys="true" keyProperty="clientId">
+        insert into fcms_client
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="fileId != null">file_id,</if>
+            <if test="clientName != null and clientName != ''">client_name,</if>
+            <if test="clientPinyin != null and clientPinyin != ''">client_pinyin,</if>
+            <if test="remarkName != null">remark_name,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="email != null">email,</if>
+            <if test="phone != null">phone,</if>
+            <if test="phoneStandby != null">phone_standby,</if>
+            <if test="liveness != null">liveness,</if>
+            <if test="faceCode != null">face_code,</if>
+            <if test="age != null">age,</if>
+            <if test="sex != null">sex,</if>
+            <if test="avatar != null and avatar != ''">avatar,</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatar_url,</if>
+            <if test="avatarBase != null">avatar_base,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="fileId != null">#{fileId},</if>
+            <if test="clientName != null and clientName != ''">#{clientName},</if>
+            <if test="clientPinyin != null and clientPinyin != ''">#{clientPinyin},</if>
+            <if test="remarkName != null">#{remarkName},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="email != null">#{email},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="phoneStandby != null">#{phoneStandby},</if>
+            <if test="liveness != null">#{liveness},</if>
+            <if test="faceCode != null">#{faceCode},</if>
+            <if test="age != null">#{age},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="avatar != null and avatar != ''">#{avatar},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="avatarBase != null">#{avatarBase},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFcmsClient" parameterType="FcmsClient">
+        update fcms_client
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="fileId != null">file_id = #{fileId},</if>
+            <if test="clientName != null and clientName != ''">client_name = #{clientName},</if>
+            <if test="clientPinyin != null and clientPinyin != ''">client_pinyin = #{clientPinyin},</if>
+            <if test="remarkName != null">remark_name = #{remarkName},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="phoneStandby != null">phone_standby = #{phoneStandby},</if>
+            <if test="liveness != null">liveness = #{liveness},</if>
+            <if test="faceCode != null">face_code = #{faceCode},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatar_url = #{avatarUrl},</if>
+            <if test="avatarBase != null">avatar_base = #{avatarBase},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where client_id = #{clientId}
+    </update>
+
+    <delete id="deleteFcmsClientByClientId" parameterType="Long">
+        delete
+        from fcms_client
+        where client_id = #{clientId}
+    </delete>
+
+    <delete id="deleteFcmsClientByClientIds" parameterType="String">
+        delete from fcms_client where client_id in
+        <foreach item="clientId" collection="array" open="(" separator="," close=")">
+            #{clientId}
+        </foreach>
+    </delete>
+</mapper>

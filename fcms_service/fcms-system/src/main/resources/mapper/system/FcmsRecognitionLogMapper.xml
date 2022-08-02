@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fcms.system.mapper.FcmsRecognitionLogMapper">
+
+    <resultMap type="com.fcms.system.domain.FcmsRecognitionLog" id="FcmsRecognitionLogResult">
+        <result property="recoId" column="reco_id"/>
+        <result property="clientId" column="client_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="clientName" column="client_name"/>
+        <result property="phone" column="phone"/>
+        <result property="liveness" column="liveness"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="faceCode" column="face_code"/>
+        <result property="faceBase" column="face_base"/>
+        <result property="faceCodeClient" column="face_code_client"/>
+        <result property="similar" column="similar"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectFcmsRecognitionLogVo">
+        select frl.reco_id,
+               frl.client_id,
+               frl.user_id,
+               frl.dept_id,
+               frl.client_name,
+               frl.phone,
+               frl.liveness,
+               frl.age,
+               frl.sex,
+               frl.face_code,
+               frl.face_base,
+               frl.face_code_client,
+               frl.similar,
+               frl.status,
+               frl.del_flag,
+               frl.create_by,
+               frl.create_time,
+               frl.update_by,
+               frl.update_time,
+               frl.remark
+        from fcms_recognition_log frl
+    </sql>
+
+    <select id="selectFcmsRecognitionLogList" parameterType="FcmsRecognitionLog" resultMap="FcmsRecognitionLogResult">
+        <include refid="selectFcmsRecognitionLogVo"/>
+        <where>
+            <if test="userId != null ">and frl.user_id = #{userId}</if>
+            <if test="clientName != null  and clientName != ''">and frl.client_name like concat('%', #{clientName}, '%')
+            </if>
+            <if test="phone != null  and phone != ''">and frl.phone like concat('%', #{phone}, '%')</if>
+            <if test="liveness != null ">and frl.liveness = #{liveness}</if>
+            <if test="age != null ">and frl.age = #{age}</if>
+            <if test="sex != null  and sex != ''">and frl.sex = #{sex}</if>
+            <if test="similar != null ">and frl.similar = #{similar}</if>
+            <if test="status != null  and status != ''">and frl.status = #{status}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+        order by frl.reco_id desc
+    </select>
+
+    <select id="selectFcmsRecognitionLogCount" resultType="java.lang.Integer">
+        select count(*)
+        from fcms_recognition_log frl
+        <where>
+            <if test="userId != null ">and frl.user_id = #{userId}</if>
+            <if test="clientName != null  and clientName != ''">and frl.client_name like concat('%', #{clientName}, '%')
+            </if>
+            <if test="phone != null  and phone != ''">and frl.phone like concat('%', #{phone}, '%')</if>
+            <if test="liveness != null ">and frl.liveness = #{liveness}</if>
+            <if test="age != null ">and frl.age = #{age}</if>
+            <if test="sex != null  and sex != ''">and frl.sex = #{sex}</if>
+            <if test="similar != null ">and frl.similar = #{similar}</if>
+            <if test="status != null  and status != ''">and frl.status = #{status}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectFcmsRecognitionLogByRecoId" parameterType="Long" resultMap="FcmsRecognitionLogResult">
+        <include refid="selectFcmsRecognitionLogVo"/>
+        where reco_id = #{recoId}
+    </select>
+
+    <insert id="insertFcmsRecognitionLog" parameterType="FcmsRecognitionLog" useGeneratedKeys="true"
+            keyProperty="recoId">
+        insert into fcms_recognition_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">client_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="clientName != null">client_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="liveness != null">liveness,</if>
+            <if test="age != null">age,</if>
+            <if test="sex != null">sex,</if>
+            <if test="faceCode != null">face_code,</if>
+            <if test="faceBase != null">face_base,</if>
+            <if test="faceCodeClient != null">face_code_client,</if>
+            <if test="similar != null">similar,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="clientName != null">#{clientName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="liveness != null">#{liveness},</if>
+            <if test="age != null">#{age},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="faceCode != null">#{faceCode},</if>
+            <if test="faceBase != null">#{faceBase},</if>
+            <if test="faceCodeClient != null">#{faceCodeClient},</if>
+            <if test="similar != null">#{similar},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFcmsRecognitionLog" parameterType="FcmsRecognitionLog">
+        update fcms_recognition_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">client_id = #{clientId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="clientName != null">client_name = #{clientName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="liveness != null">liveness = #{liveness},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="faceCode != null">face_code = #{faceCode},</if>
+            <if test="faceBase != null">face_base = #{faceBase},</if>
+            <if test="faceCodeClient != null">face_code_client = #{faceCodeClient},</if>
+            <if test="similar != null">similar = #{similar},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where reco_id = #{recoId}
+    </update>
+
+    <delete id="deleteFcmsRecognitionLogByRecoId" parameterType="Long">
+        delete
+        from fcms_recognition_log
+        where reco_id = #{recoId}
+    </delete>
+
+    <delete id="deleteFcmsRecognitionLogByRecoIds" parameterType="String">
+        delete from fcms_recognition_log where reco_id in
+        <foreach item="recoId" collection="array" open="(" separator="," close=")">
+            #{recoId}
+        </foreach>
+    </delete>
+</mapper>
